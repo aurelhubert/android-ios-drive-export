@@ -1,4 +1,4 @@
-# android-drive-export
+# Android iOS Drive Export
 
 This script aims to help to manage your strings resources for Android & iOS.
 
