@@ -10,6 +10,3 @@ https://docs.google.com/spreadsheets/d/1H3QRgSZC_27smVWyLGmQlqPwcvyXOO24Sth3-97j
 3. Run the method "exportResources".
 
 The script will create a folder (with the name of your app) at the top of your Google Drive directory. You'll find inside the Android & iOS folders with the strings files inside.
-
-## What's next?
-Feel free to improve this script.
