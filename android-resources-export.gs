@@ -1,15 +1,16 @@
+
+var appName = "App name";
+
 // Export resources function
 function exportResources() {
   
-  var name = "Weather Line";
-  
-  var appFolder = createOrGetFolder(name);
+  var appFolder = createOrGetFolder(appName);
   var sheet = SpreadsheetApp.getActiveSheet();
   var data = sheet.getDataRange().getValues();
   
   var i = 2;
-  while (data[1][i].length > 0) {
-    
+  while (data[1][i] != null && data[1][i].length > 0) {
+  
     var results = data[1][i].match(/\((\w\w)\)/g);
     if (results.length > 0) {
       var language = results[0].replace("(", "").replace(")", "");
@@ -29,7 +30,7 @@ function createXMLForLanguage(sheet, data, folder, column) {
   var content = "<resources>";
   content += "\n\n";
   content += "<!-- App name -->";
-  content += '\n<string name="app_name">Weather Line</string>';
+  content += '\n<string name="app_name">' + appName + '</string>';
   
   for (var i = 3; i < data.length; i++) {
     
@@ -37,8 +38,8 @@ function createXMLForLanguage(sheet, data, folder, column) {
       continue;
     }
     
-    if (data[i][0].length > 0) {
-      content += "\n\n<!-- " + data[i][0] + " -->";
+    if (data[i][0].length > 0) {
+      content += "\n\n\t<!-- " + data[i][0] + " -->";
     }
     
     var formatted = "";
@@ -46,7 +47,11 @@ function createXMLForLanguage(sheet, data, folder, column) {
         formatted = ' formatted="false"';
     }
     
-    content += '\n<string name="' + data[i][1] + '"' + formatted + '>' + data[i][column] + '</string>';
+    var escapedContent = data[i][column].replace("\'", "\\'");
+    Logger.log(data[i][column]);
+    Logger.log(escapedContent);
+    
+    content += '\n\t<string name="' + data[i][1] + '"' + formatted + '>' + escapedContent + '</string>';
   }
   
   content += "\n\n</resources>";
