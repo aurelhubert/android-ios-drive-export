@@ -1,6 +1,6 @@
 # Android iOS Drive Export
 
-This script aims to help to manage your strings resources for Android & iOS.
+This script aims to help you to manage your strings resources for Android & iOS.
 
 ##How it works?
 
