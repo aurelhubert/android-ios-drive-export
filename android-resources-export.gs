@@ -90,7 +90,7 @@ function createIOSResources(language, data, folder, column) {
       content += "\n\n// " + data[i][0] + "";
     }
     
-    content += '\n"' + data[i][1].toUpperCase() + '" = "' + data[i][column] + '";';
+    content += '\n"' + data[i][1] + '" = "' + data[i][column] + '";';
   }
   
   var fileName = "Localizable_" + language.toUpperCase() + ".strings";
