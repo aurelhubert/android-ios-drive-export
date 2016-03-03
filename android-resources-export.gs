@@ -1,5 +1,4 @@
-
-var appName = "App name";
+var appName = "Weather Line";
 
 
 // Export resources function
@@ -55,11 +54,15 @@ function createAndroidResources(language, data, folder, column) {
     }
     
     var formatted = "";
-    if (data[i][2].indexOf("%s") > -1) {
+    var value = data[i][column]
+    if (value.indexOf("%@") > -1) {
+      value = value.replace("%@", "%s");
+    }
+    if (data[i][column].indexOf("%s") > -1) {
         formatted = ' formatted="false"';
     }
     
-    var escapedContent = data[i][column].replace("\'", "\\'");
+    var escapedContent = value.replace("\'", "\\'");
     content += '\n\t<string name="' + data[i][1] + '"' + formatted + '>' + escapedContent + '</string>';
   }
   
@@ -78,7 +81,7 @@ function createIOSResources(language, data, folder, column) {
     
   var content = "// App";
   content += "\n";
-  content += '"APP_NAME" = "' + appName + '";';
+  content += '"app_name" = "' + appName + '";';
   
   for (var i = 3; i < data.length; i++) {
     
@@ -90,7 +93,12 @@ function createIOSResources(language, data, folder, column) {
       content += "\n\n// " + data[i][0] + "";
     }
     
-    content += '\n"' + data[i][1] + '" = "' + data[i][column] + '";';
+    var value = data[i][column]
+    if (value.indexOf("%s") > -1) {
+      value = value.replace("%s", "%@");
+    }
+    
+    content += '\n"' + data[i][1] + '" = "' + value + '";';
   }
   
   var fileName = "Localizable_" + language.toUpperCase() + ".strings";
