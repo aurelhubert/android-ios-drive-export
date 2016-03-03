@@ -1,5 +1,5 @@
-var appName = "Weather Line";
 
+var appName = "App name";
 
 // Export resources function
 function exportResources() {
