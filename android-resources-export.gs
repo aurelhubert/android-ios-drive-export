@@ -1,5 +1,5 @@
 
-var appName = "App name";
+var appName = "App Name";
 
 // Export resources function
 function exportResources() {
@@ -58,8 +58,11 @@ function createAndroidResources(language, data, folder, column) {
     if (value.indexOf("%@") > -1) {
       value = value.replace("%@", "%s");
     }
+    if (value.indexOf("...") > -1) {
+      value = value.replace("...", "&#8230;");
+    }
     if (data[i][column].indexOf("%s") > -1) {
-        formatted = ' formatted="false"';
+      formatted = ' formatted="false"';
     }
     
     var escapedContent = value.replace("\'", "\\'");
