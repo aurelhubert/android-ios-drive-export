@@ -18,7 +18,7 @@ function exportResources() {
   
     var results = data[1][i].match(/\((\w\w)\)/g);
     if (results.length > 0) {
-      var language = results[0].replace("(", "").replace(")", "");
+      var language = results[0].replace(/\(/g, "").replace(/\)/g, "");
       createAndroidResources(language, data, androidFolder, i);
       createIOSResources(language, data, iOSFolder, i);
     }
@@ -56,16 +56,16 @@ function createAndroidResources(language, data, folder, column) {
     var formatted = "";
     var value = data[i][column]
     if (value.indexOf("%@") > -1) {
-      value = value.replace("%@", "%s");
+      value = value.replace(/%@/g, "%s");
     }
     if (value.indexOf("...") > -1) {
-      value = value.replace("...", "&#8230;");
+      value = value.replace(/\.\.\./g, "&#8230;");
     }
     if (data[i][column].indexOf("%s") > -1) {
       formatted = ' formatted="false"';
     }
     
-    var escapedContent = value.replace("\'", "\\'");
+    var escapedContent = value.replace(/\'/g, "\\'");
     content += '\n\t<string name="' + data[i][1] + '"' + formatted + '>' + escapedContent + '</string>';
   }
   
@@ -98,7 +98,7 @@ function createIOSResources(language, data, folder, column) {
     
     var value = data[i][column]
     if (value.indexOf("%s") > -1) {
-      value = value.replace("%s", "%@");
+      value = value.replace(/%s/g, "%@");
     }
     
     content += '\n"' + data[i][1] + '" = "' + value + '";';
