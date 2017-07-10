@@ -1,4 +1,4 @@
-var appName = "Cyqle";
+var appName = "Your app";
 
 // Export resources function
 function exportResources() {
