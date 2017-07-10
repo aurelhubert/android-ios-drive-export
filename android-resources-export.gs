@@ -53,7 +53,7 @@ function createAndroidResources(language, data, folder, column) {
     }
     
     var formatted = "";
-    if (data[i][2].indexOf("%s") > -1) {
+    if (data[i][2].indexOf("%s") > -1 || data[i][2].indexOf("%d") > -1) {
         formatted = ' formatted="false"';
     }
     
