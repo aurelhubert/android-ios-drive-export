@@ -90,8 +90,13 @@ function createIOSResources(language, data, folder, column) {
     if (data[i][0].length > 0) {
       content += "\n\n// " + data[i][0] + "";
     }
+
+    var value = data[i][column];
+    value = value.replace("/%s/g", "%@");
+    value = value.replace(/"/g, '\\"');
+    value = value.replace(/(?:\r\n|\r|\n)/g, '\\n');
     
-    content += '\n"' + data[i][1] + '" = "' + data[i][column].replace("%s", "%@") + '";';
+    content += '\n"' + data[i][1] + '" = "' + value + '";';
   }
   
   var fileName = "Localizable_" + language.toUpperCase() + ".strings";
