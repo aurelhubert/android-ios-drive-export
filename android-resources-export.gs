@@ -1,7 +1,28 @@
-var appName = "Your app";
+var appName = "Your App";
+
+function onOpen() {
+  var ui = SpreadsheetApp.getUi();
+  ui.createMenu('Export Localized Strings')
+      .addItem('All', 'exportForAll')
+      .addItem('iOS', 'exportForIos')
+      .addItem('Android', 'exportForAndroid')
+      .addToUi();
+}
+
+function exportForAll() {
+  exportResources(true, true);
+}
+
+function exportForIos() {
+  exportResources(true, false);
+}
+
+function exportForAndroid() {
+  exportResources(false, true);
+}
 
 // Export resources function
-function exportResources() {
+function exportResources(iOS,Android) {
   
   // Folders
   var appFolder = createOrGetFolder(appName);
@@ -18,13 +39,21 @@ function exportResources() {
     var results = data[1][i].match(/\((\w\w)\)/g);
     if (results.length > 0) {
       var language = results[0].replace("(", "").replace(")", "");
-      createAndroidResources(language, data, androidFolder, i);
-      createIOSResources(language, data, iOSFolder, i);
+      
+      if (Android){
+          createAndroidResources(language, data, androidFolder, i);
+      }
+      
+      if (iOS){
+          createIOSResources(language, data, iOSFolder, i);
+      }
+      
     }
     
     i++;
   }
   
+  SpreadsheetApp.getUi().alert('Woooow 🎉', '🎊 Exported with success! 🎊', SpreadsheetApp.getUi().ButtonSet.OK);
 }
 
 // Create an XML file for Android
@@ -44,8 +73,11 @@ function createAndroidResources(language, data, folder, column) {
   
   for (var i = 3; i < data.length; i++) {
     
-    if (data[i][1].length == 0) {
+    var key = data[i][1];
+    if (key.length == 0) {
       continue;
+    } else {
+      key = key.replace(/[.]/g,"_");
     }
     
     if (data[i][0].length > 0) {
@@ -53,15 +85,17 @@ function createAndroidResources(language, data, folder, column) {
     }
     
     var formatted = "";
+    
     if (data[i][2].indexOf("%s") > -1 || data[i][2].indexOf("%d") > -1) {
         formatted = ' formatted="false"';
     }
-    
-    var escapedContent = data[i][column]
+   
+    var escapedContent;
+    escapedContent = data[i][column]
     .replace(new RegExp("\'", 'g'), "\\'")
     .replace(new RegExp("\\.\\.\\.", 'g'), "&#8230;");
-    
-    content += '\n\t<string name="' + data[i][1] + '"' + formatted + '>' + escapedContent + '</string>';
+   
+    content += '\n\t<string name="' + key + '"' + formatted + '>' + escapedContent + '</string>';
   }
   
   content += "\n\n</resources>";
@@ -92,7 +126,8 @@ function createIOSResources(language, data, folder, column) {
     }
 
     var value = data[i][column];
-    value = value.replace("/%s/g", "%@");
+    value = value.replace(/%[0-9]+\$s/g, "%@");
+    value = value.replace(/%[0-9]+\$d/g, "%@");
     value = value.replace(/"/g, '\\"');
     value = value.replace(/(?:\r\n|\r|\n)/g, '\\n');
     
