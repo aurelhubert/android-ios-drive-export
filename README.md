@@ -11,16 +11,18 @@ https://docs.google.com/spreadsheets/d/1H3QRgSZC_27smVWyLGmQlqPwcvyXOO24Sth3-97j
 
 The script will generate the next folders & files:
 ```
-/App Name
-  /Android
-    /values-en
-      /strings.xml
-    /values-fr
-      /strings.xml
-    ...
-  /iOS
-    /Localizable_EN.strings
-    /Localizable_FR.strings
-    ...
+My Drive
+  /Export
+    /App Name
+      /Android
+        /values-en
+          /strings.xml
+        /values-fr
+          /strings.xml
+        ...
+      /iOS
+        /Localizable_EN.strings
+        /Localizable_FR.strings
+        ...
 ```
 
