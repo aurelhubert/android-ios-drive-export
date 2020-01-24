@@ -1,13 +1,16 @@
-var appName = "Your app";
+var appName = "appName";
 
 // Export resources function
 function exportResources() {
   
   // Folders
-  var appFolder = createOrGetFolder(appName);
-  var androidFolder = createOrGetFolder("Android", appFolder);
-  var iOSFolder = createOrGetFolder("iOS", appFolder);
-  
+  // Data are exported here => My Drive/Export/$appName/...
+  var parentFolder = DriveApp.getFolderById(DriveApp.getRootFolder().getId());
+  var exportFolder = createOrGetFolder("Export", parentFolder);
+  var appExportFolder = createOrGetFolder(appName, exportFolder);
+  var androidFolder = createOrGetFolder("Android", appExportFolder);
+  var iOSFolder = createOrGetFolder("iOS", appExportFolder);
+    
   // Data
   var sheet = SpreadsheetApp.getActiveSheet();
   var data = sheet.getDataRange().getValues();
@@ -27,20 +30,21 @@ function exportResources() {
   
 }
 
+function getThisScriptInDrive() {
+  return DriveApp.getFileById("some unique string that wont be anywhere else / bZjxcps4UfBZfnc.E")[0];
+}
+
 // Create an XML file for Android
 // language: Current language
 // data:     Spreadsheet data array
 // folder:   Folder where create the file
 // column:   Index of the column
 function createAndroidResources(language, data, folder, column) {
-  
+    
   var folderName = "values-" + language;
   var languageFolder = createOrGetFolder(folderName, folder);
   
   var content = "<resources>";
-  content += "\n\n";
-  content += "\t<!-- App name -->";
-  content += '\n\t<string name="app_name">' + appName + '</string>';
   
   for (var i = 3; i < data.length; i++) {
     
@@ -58,6 +62,7 @@ function createAndroidResources(language, data, folder, column) {
     }
     
     var escapedContent = data[i][column]
+    .replace("&", "&amp;")
     .replace(new RegExp("\'", 'g'), "\\'")
     .replace(new RegExp("\\.\\.\\.", 'g'), "&#8230;");
     
@@ -76,10 +81,8 @@ function createAndroidResources(language, data, folder, column) {
 // folder:   Folder where create the file
 // column:   Index of the column
 function createIOSResources(language, data, folder, column) {
-    
+  
   var content = "// App";
-  content += "\n";
-  content += '"APP_NAME" = "' + appName + '";';
   
   for (var i = 3; i < data.length; i++) {
     
@@ -92,7 +95,7 @@ function createIOSResources(language, data, folder, column) {
     }
 
     var value = data[i][column];
-    value = value.replace("/%s/g", "%@");
+    value = value.replace("%s", "%@");
     value = value.replace(/"/g, '\\"');
     value = value.replace(/(?:\r\n|\r|\n)/g, '\\n');
     
@@ -128,8 +131,8 @@ function createOrGetFolder(name, folder) {
      } else {
        mainFolder = folder.createFolder(name);
      }
-  } 
-  
+  }
+    
   return mainFolder;
 }
 
@@ -152,7 +155,7 @@ function createOrGetFile(name, folder) {
      } else {
        file = folder.createFile(name, "");
      }
-  } 
-  
+  }
+    
   return file;
 }
