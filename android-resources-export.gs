@@ -95,7 +95,7 @@ function createIOSResources(language, data, folder, column) {
     }
 
     var value = data[i][column];
-    value = value.replace("%s", "%@");
+    value = value.replace(/%s/g, "%@");
     value = value.replace(/"/g, '\\"');
     value = value.replace(/(?:\r\n|\r|\n)/g, '\\n');
     
